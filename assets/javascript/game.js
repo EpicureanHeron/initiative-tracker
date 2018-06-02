@@ -8,7 +8,7 @@
 
 
 
-
+//all of the below are player character objects
 var dinty = {
     name: "Dinty",
     playerID: "#dinty",
@@ -39,30 +39,42 @@ var sheldon = {
     init: 0
 }
 
+//array featuring just the PC objects
+
 var playerArr = [dinty, dymby, tarkus, magthar, sheldon]
 
+//initializes the combantantArr which is an empty array
 var combantantArr = [];
 
+//hopefully will work with the create enemy button which will iterate this up so we can create object enemy1, enemy2, etc
 var enemyCounter = 0
 
+//has sort been pressed? 
 var sortPressed = false;
+//variable that gets added to, hopefully used in the nextCharacter()
+var activePlayerIndex = 0;
 
 //initiliazes the power of jQuery
 $(document).ready(function() {
-
+    //updates the page with the PC stats in blocks
     documentWrite()
 
+    //listens to clicks on the divs with a class of chooseable
     $('body').on('click', '.chooseable', function () {
-        
+       
+       //each .chooseable also has an attribute of playerArrIndex which is associated with whatever is chosen
        var index = $(this).attr("playerArrIndex");
 
-       var NewInit = prompt("What is the characters init?");
+       //asks the user for a new init number
+       var newInit = prompt("What is the characters init?");
 
-       playerArr[index].init = NewInit
+       //sets the init from the prompt on to the PC inits in the PC array
+       playerArr[index].init = newInit
 
+       //updates the combantantArr with the updated PC arr
+       //FOR WHATEVER REASON, THIS IS NOT WORKING THE WAY I THINK WORKS
        combantantArr.push(playerArr[index])
 
-       console.log(playerArr)
        documentWrite()
     })
     //clicking the sort button sorts the PCs by init and then generates that order on screen
@@ -72,7 +84,7 @@ $(document).ready(function() {
         console.log(playerArr)
 
         populateOrder()
-        documentWrite()
+        // documentWrite()
 
 
     })
@@ -95,7 +107,8 @@ $(document).ready(function() {
 
 
     })
-   
+
+    $("#nextTurn").click(nextCharacter)
 });
 
 function documentWrite() {
@@ -105,7 +118,7 @@ function documentWrite() {
     }
    
 }
-//this is a class
+//this is a SHOULD be a class
 function NewEnemy(name, init) {
     this.name = name;
     this.init = init;
@@ -123,7 +136,15 @@ function sortByInit() {
 }
 //updates the state of the screen so whoever is in the index[1] spot of the screen is moved to the [0] spot and the index [0] is moved to the back
 function nextCharacter() {
+    var currentTop = playerArr[0]
+    
+   
+    playerArr.splice(0,1)
+    playerArr.push(currentTop)
+    $("#fighterDisplay").append($(currentTop.playerID))
 
+    
+   
 }
 //removes character from the queue (with options that it comes back, this is probably a "revive " function)
 function killCharacter(character) {
