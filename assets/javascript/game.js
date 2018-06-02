@@ -73,7 +73,6 @@ $(document).ready(function() {
 
        //updates the combantantArr with the updated PC arr
        //FOR WHATEVER REASON, THIS IS NOT WORKING THE WAY I THINK WORKS
-       combantantArr.push(playerArr[index])
 
        documentWrite()
     })
@@ -99,7 +98,12 @@ $(document).ready(function() {
 
         var Enemy = new NewEnemy(newname, init);
 
-        combantantArr.push(Enemy)
+        playerArr.push(Enemy)
+
+        
+
+        $("#fighterDisplay").append("<div class='enemy'>"+ Enemy.name +"<br>" +Enemy.init + "</div>")
+
 
         console.log(Enemy)
 
@@ -122,7 +126,7 @@ function documentWrite() {
 function NewEnemy(name, init) {
     this.name = name;
     this.init = init;
-}
+}git
 
 
 
