@@ -126,7 +126,7 @@ $(document).ready(function() {
 
         
 
-        newDiv.html("<p>" + Enemy.name +"<br>" +Enemy.init + "</p> <img src='"+ Enemy.img +"'>")
+        newDiv.html("<p>" + Enemy.name +"<br> init: " +Enemy.init + "</p> <img src='"+ Enemy.img +"'>")
 
         $("#fighterDisplay").append(newDiv);
 
