@@ -12,30 +12,35 @@
 var dinty = {
     name: "Dinty",
     playerID: "#dinty",
+    img: "assets/images/dinty.jpg",
     init: 0,
 }
 
 var dymby = {
     name: "Dymby",
     playerID: "#dymby",
+    img: "assets/images/dymby.jpg",
     init: 0
 }
 
 var tarkus = {
     name: "Tarkus",
     playerID: "#tarkus",
+    img: "assets/images/tarkus.jpeg",
     init: 0
 }
 
 var magthar = {
     name: "Magthar",
     playerID: "#magthar",
+    img: "assets/images/magthar.jpg",
     init: 0
 }
 
 var sheldon = {
     name: "Sheldon",
     playerID: "#sheldon",
+    img: "assets/images/sheldon.png",
     init: 0
 }
 
@@ -47,12 +52,14 @@ var playerArr = [dinty, dymby, tarkus, magthar, sheldon]
 var combantantArr = [];
 
 //hopefully will work with the create enemy button which will iterate this up so we can create object enemy1, enemy2, etc
-var enemyCounter = 0
+var enemyCounter = 0;
 
 //has sort been pressed? 
 var sortPressed = false;
 //variable that gets added to, hopefully used in the nextCharacter()
 var activePlayerIndex = 0;
+
+
 
 //initiliazes the power of jQuery
 $(document).ready(function() {
@@ -95,19 +102,32 @@ $(document).ready(function() {
         var init = prompt("init?")
         //constructs a new enemy based on the class Enemy
 
+        var uniqueID = "enemy" + enemyCounter;
 
-        var Enemy = new NewEnemy(newname, init);
-
-        playerArr.push(Enemy)
-
+        var Enemy = new NewEnemy(newname, init, uniqueID);
         
-
-        $("#fighterDisplay").append("<div class='enemy'>"+ Enemy.name +"<br>" +Enemy.init + "</div>")
-
+        playerArr.push(Enemy)
 
         console.log(Enemy)
 
-        console.log(combantantArr)
+        console.log(playerArr)
+
+        var newDiv = $("<div>");
+
+        newDiv.addClass("enemy");
+
+        
+
+        newDiv.attr("id", uniqueID);
+
+        newDiv.html(Enemy.name +"<br>" +Enemy.init);
+
+        $("#fighterDisplay").append(newDiv);
+
+        enemyCounter ++;
+
+        console.log(Enemy)
+       
 
 
     })
@@ -118,15 +138,17 @@ $(document).ready(function() {
 function documentWrite() {
   
         for (i = 0; i < playerArr.length; i++) {
-            $(playerArr[i].playerID).html("<p>"+ playerArr[i].name + "<br>" +"init: " + playerArr[i].init + "</p>");
+            $(playerArr[i].playerID).html("<p>"+ playerArr[i].name + "<br>" +"init: " + playerArr[i].init + "</p>" + "<img src='"+playerArr[i].img+"'>");
     }
    
 }
 //this is a SHOULD be a class
-function NewEnemy(name, init) {
+function NewEnemy(name, init, playerID) {
     this.name = name;
     this.init = init;
-}git
+    this.playerID = "#" + playerID;
+    
+}
 
 
 
@@ -146,6 +168,8 @@ function nextCharacter() {
     playerArr.splice(0,1)
     playerArr.push(currentTop)
     $("#fighterDisplay").append($(currentTop.playerID))
+
+    console.log(playerArr[0])
 
     
    
