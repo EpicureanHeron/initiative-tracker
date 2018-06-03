@@ -46,6 +46,9 @@ var sheldon = {
 
 //array featuring just the PC objects
 
+
+var monsterArr = ["assets/images/warg.png", "assets/images/goblin.jpeg", "assets/images/troll.jpeg"]
+
 var playerArr = [dinty, dymby, tarkus, magthar, sheldon]
 
 //initializes the combantantArr which is an empty array
@@ -103,8 +106,9 @@ $(document).ready(function() {
         //constructs a new enemy based on the class Enemy
 
         var uniqueID = "enemy" + enemyCounter;
-
-        var Enemy = new NewEnemy(newname, init, uniqueID);
+        var indexForImage = Math.floor(Math.random() * monsterArr.length); 
+        var randomImage  = monsterArr[indexForImage]
+        var Enemy = new NewEnemy(newname, init, uniqueID, randomImage);
         
         playerArr.push(Enemy)
 
@@ -120,7 +124,9 @@ $(document).ready(function() {
 
         newDiv.attr("id", uniqueID);
 
-        newDiv.html(Enemy.name +"<br>" +Enemy.init);
+        
+
+        newDiv.html("<p>" + Enemy.name +"<br>" +Enemy.init + "</p> <img src='"+ Enemy.img +"'>")
 
         $("#fighterDisplay").append(newDiv);
 
@@ -143,10 +149,11 @@ function documentWrite() {
    
 }
 //this is a SHOULD be a class
-function NewEnemy(name, init, playerID) {
+function NewEnemy(name, init, playerID, randomImage) {
     this.name = name;
     this.init = init;
     this.playerID = "#" + playerID;
+    this.img = randomImage;
     
 }
 
