@@ -1,14 +1,16 @@
 //TODO
+//1. Create a Dead/Remove button on each character which allows them to be display: none. This may only need to be on enemies
+//2. following up on 1, for each PC have a fillable field which says something like "status" where we can mark if they are concious/unconcious (rather than removing them completely)
+//3. updating init via click after enemy is created does not work, gets an error saying something like "undefined does not have init"
+//4. sometimes when init is overwritten, it does not show on the character
 
-//Tried to sort the combantantArr by init like I do with the PlayerArr, but for whatever reason the sorting is not working, it seems randomly out of order.
-
-//Need to generate a new <div> with its own placement when an enemey is created
-
-//Not sure if I can create multiple enemies with the "constructor" I am using
-
-
-
+//BUG TO SQUASH: cannot update a enemy's init getting a "Uncaught TypeError: Cannot read property 'init' of undefined" but it is defined... but undefined may be referring to not passing an element playerArrIndex to the enemey
+//The above issue may be resolved with a function that is updateIndexes which cycles through the DOM objects and updates their playerArrindex...
 //all of the below are player character objects
+
+//splicing from array removes object, but DOM is just hiding with display NONE, so not updating the DOM object with the removal
+//This causes the item that is at the first position (it seems) to be stuck because when playerArrIndex is reassigned, getting duplicate entries
+//
 var dinty = {
     name: "Dinty",
     playerID: "#dinty",
@@ -71,11 +73,40 @@ $(document).ready(function() {
 
     //listens to clicks on the divs with a class of chooseable
     $('body').on('click', '.chooseable', function () {
-       
+        // grabs the index from the html 
+        var index = $(this).attr("playerArrIndex");
+        // checks to see if the init has been established or not
+
+        //THE BELOW IS NEWLY ADDED but not working 
+        //Probably has something to do with the playerArrIndex on the index.html and splicing that and not updating other things...
+        if (playerArr[index].init > 0) {
+            //asks the question if this object should be removed
+            var removal = confirm("Hit OK to Remove and cancel to set new Init.")
+            //if removal is accepted 
+            if (removal) {
+                //add the class dead (which is display: none)
+                $(this).remove()
+                //I don't know if this is working, the index is being pulled from the object on the HTML side...so this could cuase issues
+                playerArr.splice(index, 1)
+                console.log(playerArr)
+            }
+
+            else {
+                var newInit = prompt("What is the characters init?");
+                playerArr[index].init = newInit
+
+                documentWrite()
+
+            }
+
+
+        }
+        else {
        //each .chooseable also has an attribute of playerArrIndex which is associated with whatever is chosen
-       var index = $(this).attr("playerArrIndex");
+       
 
        //asks the user for a new init number
+       //need to limit this to numbers only
        var newInit = prompt("What is the characters init?");
 
        //sets the init from the prompt on to the PC inits in the PC array
@@ -85,6 +116,7 @@ $(document).ready(function() {
        //FOR WHATEVER REASON, THIS IS NOT WORKING THE WAY I THINK WORKS
 
        documentWrite()
+        }
     })
     //clicking the sort button sorts the PCs by init and then generates that order on screen
     $("#sort").click(function() {
@@ -112,6 +144,8 @@ $(document).ready(function() {
         
         playerArr.push(Enemy)
 
+        //need to grab the index for the monster and save it somewhere...potentially. 
+
         console.log(Enemy)
 
         console.log(playerArr)
@@ -120,11 +154,13 @@ $(document).ready(function() {
 
         newDiv.addClass("enemy chooseable");
 
-        
-
         newDiv.attr("id", uniqueID);
 
-        
+        var newPlayerArrIndex =  playerArr.length -1
+
+        newDiv.attr("playerArrIndex", newPlayerArrIndex)
+
+        console.log(newPlayerArrIndex)
 
         newDiv.html("<p>" + Enemy.name +"<br> init: " +Enemy.init + "</p> <img src='"+ Enemy.img +"'>")
 
@@ -133,8 +169,6 @@ $(document).ready(function() {
         enemyCounter ++;
 
         console.log(Enemy)
-       
-
 
     })
 
@@ -145,6 +179,7 @@ function documentWrite() {
   
         for (i = 0; i < playerArr.length; i++) {
             $(playerArr[i].playerID).html("<p>"+ playerArr[i].name + "<br>" +"init: " + playerArr[i].init + "</p>" + "<img src='"+playerArr[i].img+"'>");
+            
     }
    
 }
@@ -156,9 +191,6 @@ function NewEnemy(name, init, playerID, randomImage) {
     this.img = randomImage;
     
 }
-
-
-
 
 function sortByInit() {
     console.log(playerArr)
@@ -181,32 +213,24 @@ function nextCharacter() {
 
     console.log(playerArr[0])
 
-
-
-    
-   
 }
 //removes character from the queue (with options that it comes back, this is probably a "revive " function)
 function killCharacter(character) {
 
 }
 
-//Create an enenmy NPC
-function newEnemy(name, init) {
-
-
-
-
-}
 //orders the figherArr based on init 
 function populateOrder() {
     //method which reverses the order of the array
     playerArr.reverse()
     $(playerArr[0].playerID).addClass("active");
-    for (i = 0; i < playerArr.length; i++) {
-        
-        var divToMove = $(playerArr[i].playerID)
 
+    for (i = 0; i < playerArr.length; i++) {
+        if (!playerArr[0]) {
+            playerArr[i].playerID.removeClass("active");
+        }
+        var divToMove = $(playerArr[i].playerID)
+        divToMove.attr("playerArrIndex", i)
         $("#fighterDisplay").append(divToMove)
 
     }
