@@ -11,6 +11,20 @@
 //splicing from array removes object, but DOM is just hiding with display NONE, so not updating the DOM object with the removal
 //This causes the item that is at the first position (it seems) to be stuck because when playerArrIndex is reassigned, getting duplicate entries
 //
+
+
+
+var config = {
+    apiKey: "AIzaSyBjLANkmBsmol5gNQ7KIWhPXDKoq9fBNw0",
+    authDomain: "inittracker-95d8c.firebaseapp.com",
+    databaseURL: "https://inittracker-95d8c.firebaseio.com",
+    projectId: "inittracker-95d8c",
+    storageBucket: "",
+    messagingSenderId: "579669158672"
+  };
+  firebase.initializeApp(config);
+
+  var database = firebase.database();
 var dinty = {
     name: "Dinty",
     playerID: "#dinty",
@@ -64,7 +78,16 @@ var sortPressed = false;
 //variable that gets added to, hopefully used in the nextCharacter()
 var activePlayerIndex = 0;
 
+function setUpDatabase(array){
+    for(i = 0; i < array.length; i ++){
+        database.ref("PCs").push({
+            player: array[i],
+            dataAdded: firebase.database.ServerValue.TIMESTAMP,
+          })
+        }
+    }
 
+    setUpDatabase(playerArr)
 
 //initiliazes the power of jQuery
 $(document).ready(function() {
@@ -89,6 +112,7 @@ $(document).ready(function() {
                 //I don't know if this is working, the index is being pulled from the object on the HTML side...so this could cuase issues
                 playerArr.splice(index, 1)
                 console.log(playerArr)
+                //after removing, need to step through the playerArr and reassign the the index values. This is currently causing issues
             }
 
             else {
