@@ -182,6 +182,9 @@ $(document).ready(function() {
         var Enemy = new NewEnemy(newname, init, uniqueID, randomImage);
         
         playerArr.push(Enemy)
+        
+        //adds the new monser to the firebase database
+        initiateDatabasePCs(playerArr)
 
         //need to grab the index for the monster and save it somewhere...potentially. 
 
