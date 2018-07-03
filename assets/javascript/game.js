@@ -78,22 +78,15 @@ var sortPressed = false;
 //variable that gets added to, hopefully used in the nextCharacter()
 var activePlayerIndex = 0;
 
-function setUpDatabase(array){
-    for(i = 0; i < array.length; i ++){
-        database.ref("PCs").set({
-            player: array[i],
-            dataAdded: firebase.database.ServerValue.TIMESTAMP,
-          })
-        }
-    }
-
-//setUpDatabase(playerArr)
 
 function initiateDatabasePCs(array){
     for(i = 0; i < array.length; i ++){
         database.ref("chars/" + array[i].name).set({
             dataAdded: firebase.database.ServerValue.TIMESTAMP,
-            init: array[i].init
+            init: array[i].init,
+            name: array[i].name,
+            playerID: array[i].playerID,
+            img: array[i].img
           })
         }
 
@@ -113,6 +106,8 @@ $(document).ready(function() {
     $('body').on('click', '.chooseable', function () {
         // grabs the index from the html 
         var index = $(this).attr("playerArrIndex");
+        var clickedName = $(this).attr("name");
+        console.log(clickedName)
         // checks to see if the init has been established or not
 
         //THE BELOW IS NEWLY ADDED but not working 
@@ -132,8 +127,9 @@ $(document).ready(function() {
 
             else {
                 var newInit = prompt("What is the characters init?");
-                playerArr[index].init = newInit
 
+                playerArr[index].init = newInit
+                
                 documentWrite()
 
             }
@@ -150,7 +146,11 @@ $(document).ready(function() {
 
        //sets the init from the prompt on to the PC inits in the PC array
        playerArr[index].init = newInit
-
+       console.log(clickedName)
+       database.ref("chars/" + clickedName).update({
+           dataUpdated: firebase.database.ServerValue.TIMESTAMP,
+           init: newInit,
+         })
        //updates the combantantArr with the updated PC arr
        //FOR WHATEVER REASON, THIS IS NOT WORKING THE WAY I THINK WORKS
 
@@ -218,7 +218,7 @@ function documentWrite() {
   
         for (i = 0; i < playerArr.length; i++) {
             $(playerArr[i].playerID).html("<p>"+ playerArr[i].name + "<br>" +"init: " + playerArr[i].init + "</p>" + "<img src='"+playerArr[i].img+"'>");
-            
+            $(playerArr[i].playerID).attr("name", playerArr[i].name)
     }
    
 }
