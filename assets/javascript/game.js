@@ -80,15 +80,30 @@ var activePlayerIndex = 0;
 
 function setUpDatabase(array){
     for(i = 0; i < array.length; i ++){
-        database.ref("PCs").push({
+        database.ref("PCs").set({
             player: array[i],
             dataAdded: firebase.database.ServerValue.TIMESTAMP,
           })
         }
     }
 
-    setUpDatabase(playerArr)
+//setUpDatabase(playerArr)
 
+function initiateDatabasePCs(array){
+    for(i = 0; i < array.length; i ++){
+        database.ref("chars/" + array[i].name).set({
+            dataAdded: firebase.database.ServerValue.TIMESTAMP,
+            init: array[i].init
+          })
+        }
+
+        database.ref("round").set({
+            dataAdded: firebase.database.ServerValue.TIMESTAMP,
+            roundNumber: 0
+          })
+    }
+
+initiateDatabasePCs(playerArr)
 //initiliazes the power of jQuery
 $(document).ready(function() {
     //updates the page with the PC stats in blocks
